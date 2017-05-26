@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Newtodo from './Newtodo';
 import TodoList from './TodoList';
+import axios from "axios";
 
 class Todo extends Component {
     constructor(props){
@@ -36,13 +37,29 @@ class Todo extends Component {
 
     addTodo(newTodo){
         console.log('insert Todo')
+        var data_todo = {
+            id: Math.floor((Math.random() * 10000) + 1),
+            text: newTodo,
+            done:false
+        }
+
+        axios.post('http://localhost:3001/insert-todo', data_todo)
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+        // Send a POST request
+        // axios({
+        //     method: 'post',
+        //     url: 'http://localhost:3001/insert-todo',
+        //     data: data_todo
+        // });
         
         this.setState({
-            todoItems: this.state.todoItems.concat({
-                id: Math.floor((Math.random() * 10000) + 1),
-                text: newTodo,
-                done:false
-            })
+            todoItems: this.state.todoItems.concat(data_todo)
         });
     }
 
@@ -74,7 +91,7 @@ class Todo extends Component {
         let {todoItems} = this.state;
 
         return(
-            <div className="column">
+            <div>
                 <div className="column is-half is-offset-one-quarter">
                     <Newtodo onAddTodo={this.addTodo}/>
                 </div>
